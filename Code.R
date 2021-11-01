@@ -134,11 +134,47 @@ bip1478crost <- crost(bip1478[2], h = 5, outplot = 1)
 bip1478crost
 bip1478$crost_smoothed <- bip1478crost$frc.in
 
-#Croston modelfor item BIP1479#
+#Croston model for item BIP1479#
 bip1479 <- select(all_data, X, BIP001479)
 bip1479crost <- crost(bip1479[2], h = 5, outplot = 1)
 bip1479crost
 bip1479$crost_smoothed <- bip1479crost$frc.in
+
+#Croston model for item BIP4338#
+bip4338 <- select(all_data, X, BIP004338)
+bip4338crost <- crost(bip4338[2], h = 5, outplot = 1)
+bip4338crost
+bip4338$crost_smoothed <- bip4338crost$frc.in
+
+#Croston model for item BIP4394#
+bip4394 <- select(all_data, X, BIP004394)
+bip4394crost <- crost(bip4394[2], h = 5, outplot = 1)
+bip4394crostcrost
+bip4394$crost_smoothed <- bip4394crost$frc.in
+
+#Croston model for item BIP8641#
+bip8641 <- select(all_data, X, BIP008641)
+bip8641crost <- crost(bip8641[2], h = 5, outplot = 1)
+bip8641crost
+bip8641$crost_smoothed <- bip8641crost$frc.in
+
+#Croston model for item BIP2861#
+bip2861 <- select(all_data, X, BIP002861)
+bip2861crost <- crost(bip2861[2], h = 5, outplot = 1)
+bip2861crost
+bip2861$crost_smoothed <- bip2861crost$frc.in
+
+#Croston model for item BIP1480#
+bip1480 <- select(all_data, X, BIP001480)
+bip1480crost <- crost(bip1480[2], h = 5, outplot = 1)
+bip1480crost
+bip1480$crost_smoothed <- bip1480crost$frc.in
+
+#Croston model for item BIP2201#
+bip2201 <- select(all_data, X, BIP002201)
+bip2201crost <- crost(bip2201[2], h = 5, outplot = 1)
+bip2201crost
+bip2201$crost_smoothed <- bip2201crost$frc.in
 
 
 
