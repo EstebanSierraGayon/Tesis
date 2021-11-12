@@ -252,63 +252,123 @@ bip7495$SBJ_smoothed <- bip7495SBJ$frc.in
 
 #Croston model for item BIP1478#
 bip1478 <- select(all_data, X, BIP001478)
-bip1478crost <- crost(bip1478[2], h = 5, outplot = 1)
+bip1478crost <- crost(bip1478[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip1478crost
 bip1478$crost_smoothed <- bip1478crost$frc.in
+bip1478SBA <- crost(bip1478[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip1478SBA
+bip1478$SBA_smoothed <- bip1478SBA$frc.in
+bip1478SBJ <- crost(bip1478[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip1478SBJ
+bip1478$SBJ_smoothed <- bip1478SBJ$frc.in
 
 #Croston model for item BIP1479#
 bip1479 <- select(all_data, X, BIP001479)
-bip1479crost <- crost(bip1479[2], h = 5, outplot = 1)
+bip1479crost <- crost(bip1479[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip1479crost
 bip1479$crost_smoothed <- bip1479crost$frc.in
+bip1479SBA <- crost(bip1479[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip1479SBA
+bip1479$SBA_smoothed <- bip1479SBA$frc.in
+bip1479SBJ <- crost(bip1479[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip1479SBJ
+bip1479$SBJ_smoothed <- bip1479SBJ$frc.in
 
 #Croston model for item BIP4338#
 bip4338 <- select(all_data, X, BIP004338)
-bip4338crost <- crost(bip4338[2], h = 5, outplot = 1)
+bip4338crost <- crost(bip4338[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip4338crost
 bip4338$crost_smoothed <- bip4338crost$frc.in
+bip4338SBA <- crost(bip4338[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip4338SBA
+bip4338$SBA_smoothed <- bip4338SBA$frc.in
+bip4338SBJ <- crost(bip4338[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip4338SBJ
+bip4338$SBJ_smoothed <- bip4338SBJ$frc.in
 
 #Croston model for item BIP4394#
 bip4394 <- select(all_data, X, BIP004394)
-bip4394crost <- crost(bip4394[2], h = 5, outplot = 1)
+bip4394crost <- crost(bip4394[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip4394crostcrost
 bip4394$crost_smoothed <- bip4394crost$frc.in
+bip4394SBA <- crost(bip4394[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip4394SBA
+bip4394$SBA_smoothed <- bip4394SBA$frc.in
+bip4394SBJ <- crost(bip4394[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip4394SBJ
+bip4394$SBJ_smoothed <- bip4394SBJ$frc.in
 
 #Croston model for item BIP8641#
 bip8641 <- select(all_data, X, BIP008641)
-bip8641crost <- crost(bip8641[2], h = 5, outplot = 1)
+bip8641crost <- crost(bip8641[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip8641crost
 bip8641$crost_smoothed <- bip8641crost$frc.in
+bip8641SBA <- crost(bip8641[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip8641SBA
+bip8641$SBA_smoothed <- bip8641SBA$frc.in
+bip8641SBJ <- crost(bip8641[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip8641SBJ
+bip8641$SBJ_smoothed <- bip8641SBJ$frc.in
 
 #Croston model for item BIP2861#
 bip2861 <- select(all_data, X, BIP002861)
-bip2861crost <- crost(bip2861[2], h = 5, outplot = 1)
+bip2861crost <- crost(bip2861[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip2861crost
 bip2861$crost_smoothed <- bip2861crost$frc.in
+bip2861SBA <- crost(bip2861[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip2861SBA
+bip2861$SBA_smoothed <- bip2861SBA$frc.in
+bip2861SBJ <- crost(bip2861[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip2861SBJ
+bip2861$SBJ_smoothed <- bip2861SBJ$frc.in
 
 #Croston model for item BIP1480#
 bip1480 <- select(all_data, X, BIP001480)
-bip1480crost <- crost(bip1480[2], h = 5, outplot = 1)
+bip1480crost <- crost(bip1480[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip1480crost
 bip1480$crost_smoothed <- bip1480crost$frc.in
+bip1480SBA <- crost(bip1480[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip1480SBA
+bip1480$SBA_smoothed <- bip1480SBA$frc.in
+bip1480SBJ <- crost(bip1480[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip1480SBJ
+bip1480$SBJ_smoothed <- bip1480SBJ$frc.in
 
 #Croston model for item BIP2201#
 bip2201 <- select(all_data, X, BIP002201)
-bip2201crost <- crost(bip2201[2], h = 5, outplot = 1)
+bip2201crost <- crost(bip2201[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip2201crost
 bip2201$crost_smoothed <- bip2201crost$frc.in
+bip2201SBA <- crost(bip2201[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip2201SBA
+bip2201$SBA_smoothed <- bip2201SBA$frc.in
+bip2201SBJ <- crost(bip2201[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip2201SBJ
+bip2201$SBJ_smoothed <- bip2201SBJ$frc.in
 
 #Croston model for item BIP5677#
 bip5677 <- select(all_data, X, BIP005677)
-bip5677crost <- crost(bip5677[2], h = 5, outplot = 1)
+bip5677crost <- crost(bip5677[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip5677crost
 bip5677$crost_smoothed <- bip5677crost$frc.in
+bip5677SBA <- crost(bip5677[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip5677SBA
+bip5677$SBA_smoothed <- bip5677SBA$frc.in
+bip5677SBJ <- crost(bip5677[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip5677SBJ
+bip5677$SBJ_smoothed <- bip5677SBJ$frc.in
 
 #Croston model for item BIP2459#
 bip2459 <- select(all_data, X, BIP002459)
-bip2459crost <- crost(bip2459[2], h = 5, outplot = 1)
+bip2459crost <- crost(bip2459[2], h = 5, w = 0.15, type = 'naive', outplot = 1)
 bip2459crost
 bip2459$crost_smoothed <- bip2459crost$frc.in
+bip2459SBA <- crost(bip2459[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip2459SBA
+bip2459$SBA_smoothed <- bip2459SBA$frc.in
+bip7495SBJ <- crost(bip7495[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip7495SBJ
+bip7495$SBJ_smoothed <- bip7495SBJ$frc.in
 
 #Croston model for item BIP1268#
 bip1268 <- select(all_data, X, BIP001268)
