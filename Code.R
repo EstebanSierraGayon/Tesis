@@ -11,52 +11,75 @@ all_data <- read.csv("C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/T
 
 #Croston method, SBA, SBJ for item BIP1271#
 bip1271 <- all_data[,1:2]
-bip1271crost <- crost(bip1271[2], h = 5, w = 0.15, init = "naive" , outplot = 1)
+bip1271crost <- crost(bip1271[2], h = 5, w = 0.15, init = "naive")
 bip1271crost
 croston_1271 <- bip1271crost$frc.in
 bip1271$cros_smoothed <- croston_1271
-bip1271SBA <- crost(bip1271[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+bip1271SBA <- crost(bip1271[2], h = 5, type = 'sba', init = 'naive')
 bip1271SBA
 SBA_1271 <- bip1271SBA$frc.in
 bip1271$SBA_smoothed <- SBA_1271
-bip1271SBJ <- crost(bip1271[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+bip1271SBJ <- crost(bip1271[2], h = 5, type = 'sbj', init = 'naive')
 bip1271SBJ
 SBJ_1271 <- bip1271SBJ$frc.in
 bip1271$SBJ_smoothed <- SBJ_1271
 
-type_error <- cbind(croston_1271, SBA_1271, SBJ_1271)
-dimensions <- dim(f.all)[2]
-smooth_data <- t(tcrossprod(rep(1,k),bip1271[,2]))
-errors <- smooth_data - type_error
-errors[is.na(errors)] <- 0
-ME <- apply(E, 2, mean)
-MAE <- apply(abs(E), 2, mean)
-RMSE <- sqrt(apply(E^2, 2, mean))
-total_errors <- rbind(ME, MAE, RMSE)
-print(total_errors)
+type_error_1271 <- cbind(croston_1271, SBA_1271, SBJ_1271)
+dimensions_1271 <- dim(type_error_1271)[2]
+smooth_data_1271 <- t(tcrossprod(rep(1,dimensions_1271),bip1271[,2]))
+errors_1271 <- smooth_data_1271 - type_error_1271
+errors_1271[is.na(errors_1271)] <- 0
+ME_1271 <- apply(errors_1271, 2, mean)
+MAE_1271 <- apply(abs(errors_1271), 2, mean)
+RMSE_1271 <- sqrt(apply(errors_1271^2, 2, mean))
+tot_err_1271 <- rbind(ME_1271, MAE_1271, RMSE_1271)
+print(tot_err_1271)
 
-plot(bip1271$BIP001271, type = 'b')
-lines(ts(croston_1271, col='red'), frequency = 52), col='red')
-lines(bip1271crost$frc.out, start=c(3, 37))
+plot(ts(bip1271$BIP001271, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_1271, frequency = 52), col='red')
+lines(ts(bip1271crost$frc.out, start=c(1,1.69)), col='green')
 
-??plot
+lines(ts(SBA_1271, frequency = 52), col='blue')
+lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='yellow')
 
-
-
-
-
+lines(ts(SBJ_1271, frequency = 52), col='orange')
+lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
-bip3819crost <- crost(bip3819[2], h = 5, w = 0.15, init = 'naive', outplot = 1)
+bip3819crost <- crost(bip3819[2], h = 5, w = 0.15, init = "naive")
 bip3819crost
-bip3819$cros_smoothed <- bip3819crost$frc.in
-bip3819SBA <- crost(bip3819[2], h = 5, type = 'sba',  init = 'naive', outplot = 1)
+croston_3819 <- bip3819crost$frc.in
+bip3819$cros_smoothed <- croston_3819
+bip3819SBA <- crost(bip3819[2], h = 5, type = 'sba', init = 'naive')
 bip3819SBA
-bip3819$SBA_smoothed <- bip3819SBA$frc.in
-bip3819SBJ <- crost(bip3819[2], h = 5, type = 'sbj',  init = 'naive', outplot = 1)
+SBA_3819 <- bip3819SBA$frc.in
+bip3819$SBA_smoothed <- SBA_3819
+bip3819SBJ <- crost(bip3819[2], h = 5, type = 'sbj', init = 'naive')
 bip3819SBJ
-bip3819$SBJ_smoothed <- bip3819SBJ$frc.in
+SBJ_3819 <- bip3819SBJ$frc.in
+bip3819$SBJ_smoothed <- SBJ_3819
+
+type_error_3819 <- cbind(croston_3819, SBA_3819, SBJ_3819)
+dimensions_3819 <- dim(type_error_3819)[2]
+smooth_data_3819 <- t(tcrossprod(rep(1,dimensions_3819),bip3819[,2]))
+errors_3819 <- smooth_data_3819 - type_error_3819
+errors_3819[is.na(errors_3819)] <- 0
+ME_3819 <- apply(errors_3819, 2, mean)
+MAE_3819 <- apply(abs(errors_3819), 2, mean)
+RMSE_3819 <- sqrt(apply(errors_3819^2, 2, mean))
+tot_err_3819 <- rbind(ME_3819, MAE_3819, RMSE_3819)
+print(tot_err_3819)
+
+plot(ts(bip3819$BIP003819, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_3819, frequency = 52), col='red')
+lines(ts(bip3819crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_3819, frequency = 52), col='blue')
+lines(ts(bip3819SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_3819, frequency = 52), col='orange')
+lines(ts(bip3819SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP1998#
 bip1998 <- select(all_data, X, BIP001998)
