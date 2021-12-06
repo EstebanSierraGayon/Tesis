@@ -6,7 +6,7 @@ library(dplyr)
 
 ?crost
 
-all_data <- read.csv("C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/AllData.csv", header = TRUE)
+all_data <- read.csv("D:/Esteban/TESIS/Tesis/Tesis/AllData.csv", header = TRUE)
 
 
 #Croston method, SBA, SBJ for item BIP1271#
@@ -83,87 +83,255 @@ lines(ts(bip3819SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP1998#
 bip1998 <- select(all_data, X, BIP001998)
-bip1998crost <- crost(bip1998[2], h = 5, w = 0.15,  init = 'naive', outplot =1)
+bip1998crost <- crost(bip1998[2], h = 5, w = 0.15, init = "naive")
 bip1998crost
-bip1998$cros_smooth <- bip1998crost$frc.in
-bip1998SBA <- crost(bip1998[2], h = 5, type = 'sba',  init = 'naive', outplot = 1)
+croston_1998 <- bip1998crost$frc.in
+bip1998$cros_smoothed <- croston_1998
+bip1998SBA <- crost(bip1998[2], h = 5, type = 'sba', init = 'naive')
 bip1998SBA
-bip1999$SBA_smoothed <- bip1998SBA$frc.in
-bip1998SBJ <- crost(bip1998[2], h = 5, type = 'sbj',  init = 'naive', outplot = 1)
+SBA_1998 <- bip1998SBA$frc.in
+bip1998$SBA_smoothed <- SBA_1998
+bip1998SBJ <- crost(bip1998[2], h = 5, type = 'sbj', init = 'naive')
 bip1998SBJ
-bip1998$SBJ_smoothed <- bip1998SBJ$frc.in
+SBJ_1998 <- bip1998SBJ$frc.in
+bip1998$SBJ_smoothed <- SBJ_1998
+
+type_error_1998 <- cbind(croston_1998, SBA_1998, SBJ_1998)
+dimensions_1998 <- dim(type_error_1998)[2]
+smooth_data_1998 <- t(tcrossprod(rep(1,dimensions_1998),bip1998[,2]))
+errors_1998 <- smooth_data_1998 - type_error_1998
+errors_1998[is.na(errors_1998)] <- 0
+ME_1998 <- apply(errors_1998, 2, mean)
+MAE_1998 <- apply(abs(errors_1998), 2, mean)
+RMSE_1998 <- sqrt(apply(errors_1998^2, 2, mean))
+tot_err_1998 <- rbind(ME_1998, MAE_1998, RMSE_1998)
+print(tot_err_1998)
+
+plot(ts(bip1998$BIP001998, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_1998, frequency = 52), col='red')
+lines(ts(bip1998crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_1998, frequency = 52), col='blue')
+lines(ts(bip1998SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_1998, frequency = 52), col='orange')
+lines(ts(bip1998SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP2015#
 bip2015 <- select(all_data, X, BIP002015)
-bip2015crost <- crost(bip2015[2], h = 5, w = 0.15,  init = 'naive', outplot = 1)
+bip2015crost <- crost(bip2015[2], h = 5, w = 0.15, init = "naive")
 bip2015crost
-bip2015$cros_smooth <- bip2015crost$frc.in
-bip2015SBA <- crost(bip2015[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+croston_2015 <- bip2015crost$frc.in
+bip2015$cros_smoothed <- croston_2015
+bip2015SBA <- crost(bip2015[2], h = 5, type = 'sba', init = 'naive')
 bip2015SBA
-bip2015$SBA_smoothed <- bip2015SBA$frc.in
-bip2015SBJ <- crost(bip2015[2], h = 5, type = 'sbj',  init = 'naive', outplot = 1)
+SBA_2015 <- bip2015SBA$frc.in
+bip2015$SBA_smoothed <- SBA_2015
+bip2015SBJ <- crost(bip2015[2], h = 5, type = 'sbj', init = 'naive')
 bip2015SBJ
-bip2015$SBJ_smoothed <- bip2015SBJ$frc.in
+SBJ_2015 <- bip2015SBJ$frc.in
+bip2015$SBJ_smoothed <- SBJ_2015
+
+type_error_2015 <- cbind(croston_2015, SBA_2015, SBJ_2015)
+dimensions_2015 <- dim(type_error_2015)[2]
+smooth_data_2015 <- t(tcrossprod(rep(1,dimensions_2015),bip2015[,2]))
+errors_2015 <- smooth_data_2015 - type_error_2015
+errors_2015[is.na(errors_2015)] <- 0
+ME_2015 <- apply(errors_2015, 2, mean)
+MAE_2015 <- apply(abs(errors_2015), 2, mean)
+RMSE_2015 <- sqrt(apply(errors_2015^2, 2, mean))
+tot_err_2015 <- rbind(ME_2015, MAE_2015, RMSE_2015)
+print(tot_err_2015)
+
+plot(ts(bip2015$BIP002015, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_2015, frequency = 52), col='red')
+lines(ts(bip2015crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_2015, frequency = 52), col='blue')
+lines(ts(bip2015SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_2015, frequency = 52), col='orange')
+lines(ts(bip2015SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP2010
 bip2010 <- select(all_data, X, BIP002010)
-bip2010crost <- crost(bip2010[2], h = 5, w = 0.15, init = 'naive', outplot = 1)
+bip2010crost <- crost(bip2010[2], h = 5, w = 0.15, init = "naive")
 bip2010crost
-bip2010$cros_smooth <- bip2010crost$frc.in
-bip2010SBA <- crost(bip2010[2], h = 5, type = 'sba', init = 'naive', outplot = 1)
+croston_2010 <- bip2010crost$frc.in
+bip2010$cros_smoothed <- croston_2010
+bip2010SBA <- crost(bip2010[2], h = 5, type = 'sba', init = 'naive')
 bip2010SBA
-bip2010$SBA_smoothed <- bip2010SBA$frc.in
-bip2010SBJ <- crost(bip2010[2], h = 5, type = 'sbj', init = 'naive', outplot = 1)
+SBA_2010 <- bip2010SBA$frc.in
+bip2010$SBA_smoothed <- SBA_2010
+bip2010SBJ <- crost(bip2010[2], h = 5, type = 'sbj', init = 'naive')
 bip2010SBJ
-bip2010$SBJ_smoothed <- bip2010SBJ$frc.in
+SBJ_2010 <- bip2010SBJ$frc.in
+bip2010$SBJ_smoothed <- SBJ_2010
+
+type_error_2010 <- cbind(croston_2010, SBA_2010, SBJ_2010)
+dimensions_2010 <- dim(type_error_2010)[2]
+smooth_data_2010 <- t(tcrossprod(rep(1,dimensions_2010),bip2010[,2]))
+errors_2010 <- smooth_data_2010 - type_error_2010
+errors_2010[is.na(errors_2010)] <- 0
+ME_2010 <- apply(errors_2010, 2, mean)
+MAE_2010 <- apply(abs(errors_2010), 2, mean)
+RMSE_2010 <- sqrt(apply(errors_2010^2, 2, mean))
+tot_err_2010 <- rbind(ME_2010, MAE_2010, RMSE_2010)
+print(tot_err_2010)
+
+plot(ts(bip2010$BIP002010, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_2010, frequency = 52), col='red')
+lines(ts(bip2010crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_2010, frequency = 52), col='blue')
+lines(ts(bip2010SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_2010, frequency = 52), col='orange')
+lines(ts(bip2010SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP2898#
 bip2898 <- select(all_data, X, BIP002898)
-bip2898crost <- crost(bip2898[2], h = 5, w = 0.15,  init = 'naive', outplot = 1)
+bip2898crost <- crost(bip2898[2], h = 5, w = 0.15, init = "naive")
 bip2898crost
-bip2898$cros_smoothed <- bip2898crost$frc.in
-bip2898SBA <- crost(bip2898[2], h = 5, type = 'sba',  init = 'naive', outplot = 1)
+croston_2898 <- bip2898crost$frc.in
+bip2898$cros_smoothed <- croston_2898
+bip2898SBA <- crost(bip2898[2], h = 5, type = 'sba', init = 'naive')
 bip2898SBA
-bip2898$SBA_smoothed <- bip2898SBA$frc.in
-bip2898SBJ <- crost(bip2898[2], h = 5, type = 'sbj',  init = 'naive', outplot = 1)
+SBA_2898 <- bip2898SBA$frc.in
+bip2898$SBA_smoothed <- SBA_2898
+bip2898SBJ <- crost(bip2898[2], h = 5, type = 'sbj', init = 'naive')
 bip2898SBJ
-bip2898$SBJ_smoothed <- bip2898SBJ$frc.in
+SBJ_2898 <- bip2898SBJ$frc.in
+bip2898$SBJ_smoothed <- SBJ_2898
+
+type_error_2898 <- cbind(croston_2898, SBA_2898, SBJ_2898)
+dimensions_2898 <- dim(type_error_2898)[2]
+smooth_data_2898 <- t(tcrossprod(rep(1,dimensions_2898),bip2898[,2]))
+errors_2898 <- smooth_data_2898 - type_error_2898
+errors_2898[is.na(errors_2898)] <- 0
+ME_2898 <- apply(errors_2898, 2, mean)
+MAE_2898 <- apply(abs(errors_2898), 2, mean)
+RMSE_2898 <- sqrt(apply(errors_2898^2, 2, mean))
+tot_err_2898 <- rbind(ME_2898, MAE_2898, RMSE_2898)
+print(tot_err_2898)
+
+plot(ts(bip2898$BIP002898, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_2898, frequency = 52), col='red')
+lines(ts(bip2898crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_2898, frequency = 52), col='blue')
+lines(ts(bip2898SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_2898, frequency = 52), col='orange')
+lines(ts(bip2898SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP1266#
 bip1266 <- select(all_data, X, BIP001266)
-bip1266crost <- crost(bip1266[2], h = 5, w = 0.15,  init = 'naive', outplot = 1)
+bip1266crost <- crost(bip1266[2], h = 5, w = 0.15, init = "naive")
 bip1266crost
-bip1266$crost_smoothed <- bip1266crost$frc.in
-bip1266SBA <- crost(bip1266[2], h = 5, type = 'sba',  init = 'naive', outplot = 1)
+croston_1266 <- bip1266crost$frc.in
+bip1266$cros_smoothed <- croston_1266
+bip1266SBA <- crost(bip1266[2], h = 5, type = 'sba', init = 'naive')
 bip1266SBA
-bip1266$SBA_smoothed <- bip1266SBA$frc.in
-bip1266SBJ <- crost(bip1266[2], h = 5, type = 'sbj',  init = 'naive', outplot = 1)
+SBA_1266 <- bip1266SBA$frc.in
+bip1266$SBA_smoothed <- SBA_1266
+bip1266SBJ <- crost(bip1266[2], h = 5, type = 'sbj', init = 'naive')
 bip1266SBJ
-bip1266$SBJ_smoothed <- bip1266SBJ$frc.in
+SBJ_1266 <- bip1266SBJ$frc.in
+bip1266$SBJ_smoothed <- SBJ_1266
+
+type_error_1266 <- cbind(croston_1266, SBA_1266, SBJ_1266)
+dimensions_1266 <- dim(type_error_1266)[2]
+smooth_data_1266 <- t(tcrossprod(rep(1,dimensions_1266),bip1266[,2]))
+errors_1266 <- smooth_data_1266 - type_error_1266
+errors_1266[is.na(errors_1266)] <- 0
+ME_1266 <- apply(errors_1266, 2, mean)
+MAE_1266 <- apply(abs(errors_1266), 2, mean)
+RMSE_1266 <- sqrt(apply(errors_1266^2, 2, mean))
+tot_err_1266 <- rbind(ME_1266, MAE_1266, RMSE_1266)
+print(tot_err_1266)
+
+plot(ts(bip1266$BIP001266, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_1266, frequency = 52), col='red')
+lines(ts(bip1266crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_1266, frequency = 52), col='blue')
+lines(ts(bip1266SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_1266, frequency = 52), col='orange')
+lines(ts(bip1266SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP7983#
 bip7983 <- select(all_data, X, BIP007983)
-bip7983crost <- crost(bip7983[2], h = 5, w = 0.15,  init = 'naive', outplot = 1)
+bip7983crost <- crost(bip7983[2], h = 5, w = 0.15, init = "naive")
 bip7983crost
-bip7983$crost_smoothed <- bip7983crost$frc.in
-bip7983SBA <- crost(bip7983[2], h = 5, type = 'sba',  init = 'naive', outplot = 1)
+croston_7983 <- bip7983crost$frc.in
+bip7983$cros_smoothed <- croston_7983
+bip7983SBA <- crost(bip7983[2], h = 5, type = 'sba', init = 'naive')
 bip7983SBA
-bip7983$SBA_smoothed <- bip7983SBA$frc.in
-bip7983SBJ <- crost(bip7983[2], h = 5, type = 'sbj',  init = 'naive', outplot = 1)
+SBA_7983 <- bip7983SBA$frc.in
+bip7983$SBA_smoothed <- SBA_7983
+bip7983SBJ <- crost(bip7983[2], h = 5, type = 'sbj', init = 'naive')
 bip7983SBJ
-bip7983$SBJ_smoothed <- bip7983SBJ$frc.in
+SBJ_7983 <- bip7983SBJ$frc.in
+bip7983$SBJ_smoothed <- SBJ_7983
+
+type_error_7983 <- cbind(croston_7983, SBA_7983, SBJ_7983)
+dimensions_7983 <- dim(type_error_7983)[2]
+smooth_data_7983 <- t(tcrossprod(rep(1,dimensions_7983),bip7983[,2]))
+errors_7983 <- smooth_data_7983 - type_error_7983
+errors_7983[is.na(errors_7983)] <- 0
+ME_7983 <- apply(errors_7983, 2, mean)
+MAE_7983 <- apply(abs(errors_7983), 2, mean)
+RMSE_7983 <- sqrt(apply(errors_7983^2, 2, mean))
+tot_err_7983 <- rbind(ME_7983, MAE_7983, RMSE_7983)
+print(tot_err_7983)
+
+plot(ts(bip7983$BIP007983, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_7983, frequency = 52), col='red')
+lines(ts(bip7983crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_7983, frequency = 52), col='blue')
+lines(ts(bip7983SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_7983, frequency = 52), col='orange')
+lines(ts(bip7983SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston method for item BIP5889#
 bip5889 <- select(all_data, X, BIP005889)
-bip5889crost <- crost(bip5889[2], h = 5, w = 0.15,  init = 'naive', outplot = 1)
+bip5889crost <- crost(bip5889[2], h = 5, w = 0.15, init = "naive")
 bip5889crost
-bip5889$crost_smoothed <- bip5889crost$frc.in
-bip5889SBA <- crost(bip5889[2], h = 5, type = 'sba',  init = 'naive',  outplot = 1)
+croston_5889 <- bip5889crost$frc.in
+bip5889$cros_smoothed <- croston_5889
+bip5889SBA <- crost(bip5889[2], h = 5, type = 'sba', init = 'naive')
 bip5889SBA
-bip5898$SBA_smoothed <- bip5889SBA$frc.in
-bip5889SBJ <- crost(bip5889[2], h = 5, type = 'sbj',  init = 'naive', outplot = 1)
+SBA_5889 <- bip5889SBA$frc.in
+bip5889$SBA_smoothed <- SBA_5889
+bip5889SBJ <- crost(bip5889[2], h = 5, type = 'sbj', init = 'naive')
 bip5889SBJ
-bip5889$SBJ_smoothed <- bip5889SBJ$frc.in
+SBJ_5889 <- bip5889SBJ$frc.in
+bip5889$SBJ_smoothed <- SBJ_5889
+
+type_error_5889 <- cbind(croston_5889, SBA_5889, SBJ_5889)
+dimensions_5889 <- dim(type_error_5889)[2]
+smooth_data_5889 <- t(tcrossprod(rep(1,dimensions_5889),bip5889[,2]))
+errors_5889 <- smooth_data_5889 - type_error_5889
+errors_5889[is.na(errors_5889)] <- 0
+ME_5889 <- apply(errors_5889, 2, mean)
+MAE_5889 <- apply(abs(errors_5889), 2, mean)
+RMSE_5889 <- sqrt(apply(errors_5889^2, 2, mean))
+tot_err_5889 <- rbind(ME_5889, MAE_5889, RMSE_5889)
+print(tot_err_5889)
+
+plot(ts(bip5889$BIP005889, frequency = 52), type = 'b', xlim = c(1, 1.8))
+lines(ts(croston_5889, frequency = 52), col='red')
+lines(ts(bip5889crost$frc.out, start=c(1,1.69)), col='green')
+
+lines(ts(SBA_5889, frequency = 52), col='blue')
+lines(ts(bip5889SBA$frc.out, start = c(1,1.69)), col='yellow')
+
+lines(ts(SBJ_5889, frequency = 52), col='orange')
+lines(ts(bip5889SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston model for item BIP8645#
 bip8645 <- select(all_data, X, BIP008645)
