@@ -6,7 +6,7 @@ library(dplyr)
 
 ?crost
 
-all_data <- read.csv("D:/Esteban/TESIS/Tesis/Tesis/AllData.csv", header = TRUE)
+all_data <- read.csv("C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/AllData.csv", header = TRUE)
 
 
 #Croston method, SBA, SBJ for item BIP1271#
@@ -24,6 +24,8 @@ bip1271SBJ
 SBJ_1271 <- bip1271SBJ$frc.in
 bip1271$SBJ_smoothed <- SBJ_1271
 
+View(bip1271)
+
 type_error_1271 <- cbind(croston_1271, SBA_1271, SBJ_1271)
 dimensions_1271 <- dim(type_error_1271)[2]
 smooth_data_1271 <- t(tcrossprod(rep(1,dimensions_1271),bip1271[,2]))
@@ -35,6 +37,11 @@ RMSE_1271 <- sqrt(apply(errors_1271^2, 2, mean))
 tot_err_1271 <- rbind(ME_1271, MAE_1271, RMSE_1271)
 print(tot_err_1271)
 
+bip1271$err_croston <- errors_1271[,1]
+bip1271$err_SBA <- errors_1271[,2]
+bip1271$err_SBJ <- errors_1271[,3]
+  
+  
 plot(ts(bip1271$BIP001271, frequency = 52), type = 'b', xlim = c(1, 1.8))
 lines(ts(croston_1271, frequency = 52), col='red')
 lines(ts(bip1271crost$frc.out, start=c(1,1.69)), col='green')
