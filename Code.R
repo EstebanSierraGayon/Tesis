@@ -1,8 +1,11 @@
 install.packages("dplyr")
+install.packages("writexl")
 
 library(forecast)
 library(tsintermittent)
 library(dplyr)
+library(tibble)
+library(writexl)
 
 ?crost
 
@@ -23,10 +26,12 @@ bip1271SBJ <- crost(bip1271[2], h = 5, type = 'sbj', init = 'naive')
 bip1271SBJ
 SBJ_1271 <- bip1271SBJ$frc.in
 bip1271$SBJ_smoothed <- SBJ_1271
+bip1271_ses <- ses(bip1271[,2], h = 5, alpha = 0.15, initial = "simple")
+SES_bip1271 <- bip1271_ses$fitted
+SESpred_bip1271 <- bip1271_ses$mean
+bip1271 <- add_column(bip1271, SES_bip1271, .after = "BIP001271")
 
-View(bip1271)
-
-type_error_1271 <- cbind(croston_1271, SBA_1271, SBJ_1271)
+type_error_1271 <- cbind(croston_1271, SBA_1271, SBJ_1271, SES_bip1271)
 dimensions_1271 <- dim(type_error_1271)[2]
 smooth_data_1271 <- t(tcrossprod(rep(1,dimensions_1271),bip1271[,2]))
 errors_1271 <- smooth_data_1271 - type_error_1271
@@ -40,17 +45,26 @@ print(tot_err_1271)
 bip1271$err_croston <- errors_1271[,1]
 bip1271$err_SBA <- errors_1271[,2]
 bip1271$err_SBJ <- errors_1271[,3]
-  
-  
+bip1271$err_SES <- errors_1271[,4]
+bip1271 <- add_column(bip1271, SES_bip1271, .after = "BIP001271")
+
 plot(ts(bip1271$BIP001271, frequency = 52), type = 'b', xlim = c(1, 1.8))
 lines(ts(croston_1271, frequency = 52), col='red')
 lines(ts(bip1271crost$frc.out, start=c(1,1.69)), col='green')
 
 lines(ts(SBA_1271, frequency = 52), col='blue')
-lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='yellow')
+lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='darkolivegreen')
 
 lines(ts(SBJ_1271, frequency = 52), col='orange')
 lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple')
+
+lines(ts(SES, frequency = 52), col='gold3')
+lines(ts(SESpred_bip1271, start = c(1,1.69)), col='cyan3')
+
+View(bip1271)
+
+write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_data.xlsx")
+
 
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
@@ -1265,6 +1279,12 @@ MAE_3668 <- apply(abs(errors_3668), 2, mean)
 RMSE_3668 <- sqrt(apply(errors_3668^2, 2, mean))
 tot_err_3668 <- rbind(ME_3668, MAE_3668, RMSE_3668)
 print(tot_err_3668)
+
+bip3668$err_croston <- errors_3668[,1]
+bip3668$err_SBA <- errors_3668[,2]
+bip3668$err_SBJ <- errors_3668[,3]
+
+View(bip3668)
 
 plot(ts(bip3668$BIP003668, frequency = 52), type = 'b', xlim = c(1, 1.8))
 lines(ts(croston_3668, frequency = 52), col='red')
