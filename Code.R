@@ -48,18 +48,26 @@ bip1271$err_SBJ <- errors_1271[,3]
 bip1271$err_SES <- errors_1271[,4]
 bip1271 <- add_column(bip1271, SES_bip1271, .after = "BIP001271")
 
-plot(ts(bip1271$BIP001271, frequency = 52), type = 'b', xlim = c(1, 1.8))
-lines(ts(croston_1271, frequency = 52), col='red')
-lines(ts(bip1271crost$frc.out, start=c(1,1.69)), col='green')
+windows(width = 20, height = 10)
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip1271$BIP001271, frequency = 52), main = "Forecast of item BIP001271", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_1271, frequency = 52), col='red', lwd = 2)
+lines(ts(bip1271crost$frc.out, start=c(1,1.69)), col='green', lwd = 2)
 
-lines(ts(SBA_1271, frequency = 52), col='blue')
-lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='darkolivegreen')
+lines(ts(SBA_1271, frequency = 52), col='blue', lwd = 2)
+lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='darkolivegreen', lwd = 2)
 
-lines(ts(SBJ_1271, frequency = 52), col='orange')
-lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple')
+lines(ts(SBJ_1271, frequency = 52), col='orange', lwd = 2)
+lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 2)
 
-lines(ts(SES, frequency = 52), col='gold3')
-lines(ts(SESpred_bip1271, start = c(1,1.69)), col='cyan3')
+lines(ts(SES, frequency = 52), col='gold3', lwd = 2)
+lines(ts(SESpred_bip1271, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "Croston avrg. for.", "SBA", "SBA avrg. for", "SBJ smooth",
+                                 "SBJ avrg. for", "Exp. smooth", "Exp. smooth. avrg. for"), lwd = 1,
+       col = c("red","green","blue","darkolivegreen","orange","purple","gold3","cyan3"), xpd = TRUE)
+on.exit(par(opar))
 
 View(bip1271)
 
