@@ -30,6 +30,7 @@ bip1271_ses <- ses(bip1271[,2], h = 5, alpha = 0.15, initial = "simple")
 SES_bip1271 <- bip1271_ses$fitted
 SESpred_bip1271 <- bip1271_ses$mean
 bip1271 <- add_column(bip1271, SES_bip1271, .after = "BIP001271")
+SESpred_bip1271
 
 type_error_1271 <- cbind(croston_1271, SBA_1271, SBJ_1271, SES_bip1271)
 dimensions_1271 <- dim(type_error_1271)[2]
