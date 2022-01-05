@@ -14,19 +14,19 @@ all_data <- read.csv("C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/T
 
 #Croston method, SBA, SBJ for item BIP1271#
 bip1271 <- all_data[,1:2]
-bip1271crost <- crost(bip1271[2], h = 5, w = 0.15, init = "naive")
+bip1271crost <- crost(bip1271[2], h = 5, w = 0.9, init = "naive")
 bip1271crost
 croston_1271 <- bip1271crost$frc.in
 bip1271$cros_smoothed <- croston_1271
-bip1271SBA <- crost(bip1271[2], h = 5, type = 'sba', init = 'naive')
+bip1271SBA <- crost(bip1271[2], h = 5, w= 0.9, type = 'sba', init = 'naive')
 bip1271SBA
 SBA_1271 <- bip1271SBA$frc.in
 bip1271$SBA_smoothed <- SBA_1271
-bip1271SBJ <- crost(bip1271[2], h = 5, type = 'sbj', init = 'naive')
+bip1271SBJ <- crost(bip1271[2], h = 5, w = 0.9, type = 'sbj', init = "naive")
 bip1271SBJ
 SBJ_1271 <- bip1271SBJ$frc.in
 bip1271$SBJ_smoothed <- SBJ_1271
-bip1271_ses <- ses(bip1271[,2], h = 5, alpha = 0.15, initial = "simple")
+bip1271_ses <- ses(bip1271[,2], h = 5, alpha = 0.9, initial = "simple")
 SES_bip1271 <- bip1271_ses$fitted
 SESpred_bip1271 <- bip1271_ses$mean
 bip1271 <- add_column(bip1271, SES_bip1271, .after = "BIP001271")
@@ -54,20 +54,19 @@ opar <- par(no.readonly = TRUE)
 par(mar=c(5.1, 4.1, 4.1, 6))
 plot(ts(bip1271$BIP001271, frequency = 52), main = "Forecast of item BIP001271", type = 'b', xlim = c(1, 1.8),
      ylab = "Demand", lwd = 2)
-lines(ts(croston_1271, frequency = 52), col='red', lwd = 2)
-lines(ts(bip1271crost$frc.out, start=c(1,1.69)), col='green', lwd = 2)
+lines(ts(croston_1271, frequency = 52), col='red', lwd = 1)
+lines(ts(bip1271crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
 
-lines(ts(SBA_1271, frequency = 52), col='blue', lwd = 2)
-lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='darkolivegreen', lwd = 2)
+lines(ts(SBA_1271, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
 
-lines(ts(SBJ_1271, frequency = 52), col='orange', lwd = 2)
-lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 2)
+lines(ts(SBJ_1271, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
 
-lines(ts(SES, frequency = 52), col='gold3', lwd = 2)
+lines(ts(SES, frequency = 52), col='cyan3', lwd = 1)
 lines(ts(SESpred_bip1271, start = c(1,1.69)), col='cyan3', lwd = 1)
-legend("bottomright", legend = c("Croston", "Croston avrg. for.", "SBA", "SBA avrg. for", "SBJ smooth",
-                                 "SBJ avrg. for", "Exp. smooth", "Exp. smooth. avrg. for"), lwd = 1,
-       col = c("red","green","blue","darkolivegreen","orange","purple","gold3","cyan3"), xpd = TRUE)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
 on.exit(par(opar))
 
 View(bip1271)
@@ -1283,11 +1282,13 @@ dimensions_3668 <- dim(type_error_3668)[2]
 smooth_data_3668 <- t(tcrossprod(rep(1,dimensions_3668),bip3668[,2]))
 errors_3668 <- smooth_data_3668 - type_error_3668
 errors_3668[is.na(errors_3668)] <- 0
-ME_3668 <- apply(errors_3668, 2, mean)
+ME_3668 <- apply(errors_3668^2, 2, mean)
 MAE_3668 <- apply(abs(errors_3668), 2, mean)
 RMSE_3668 <- sqrt(apply(errors_3668^2, 2, mean))
 tot_err_3668 <- rbind(ME_3668, MAE_3668, RMSE_3668)
 print(tot_err_3668)
+
+?crost
 
 bip3668$err_croston <- errors_3668[,1]
 bip3668$err_SBA <- errors_3668[,2]
