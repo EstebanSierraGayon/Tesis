@@ -190,23 +190,26 @@ legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 
 
 View(bip1271)
 
+?crost
+
+
 write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_02_data.xlsx")
 
-#Croston method, SBA, SBJ with aplha = 0.9 for item BIP1271#
+#Croston method, SBA, SBJ with aplha = 0.5 for item BIP1271#
 bip1271 <- all_data[,1:2]
-bip1271crost <- crost(bip1271[2], h = 5, w = 0.9, init = "naive")
+bip1271crost <- crost(bip1271[2], h = 5, w = 0.5, init = "naive")
 bip1271crost
 croston_1271 <- bip1271crost$frc.in
 bip1271$cros_smoothed <- croston_1271
-bip1271SBA <- crost(bip1271[2], h = 5, w= 0.9, type = 'sba', init = 'naive')
+bip1271SBA <- crost(bip1271[2], h = 5, w= 0.5, type = 'sba', init = 'naive')
 bip1271SBA
 SBA_1271 <- bip1271SBA$frc.in
 bip1271$SBA_smoothed <- SBA_1271
-bip1271SBJ <- crost(bip1271[2], h = 5, w = 0.9, type = 'sbj', init = "naive")
+bip1271SBJ <- crost(bip1271[2], h = 5, w = 0.5, type = 'sbj', init = "naive")
 bip1271SBJ
 SBJ_1271 <- bip1271SBJ$frc.in
 bip1271$SBJ_smoothed <- SBJ_1271
-bip1271_ses <- ses(bip1271[,2], h = 5, alpha = 0.9, initial = "simple")
+bip1271_ses <- ses(bip1271[,2], h = 5, alpha = 0.5, initial = "simple")
 SES_bip1271 <- bip1271_ses$fitted
 SESpred_bip1271 <- bip1271_ses$mean
 bip1271 <- add_column(bip1271, SES_bip1271, .after = "BIP001271")
@@ -250,7 +253,7 @@ legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 
 
 View(bip1271)
 
-write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_09_data.xlsx")
+write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_05_data.xlsx")
 
 
 #Croston method, SBA, SBJ with "optimal" alpha for item BIP1271#
