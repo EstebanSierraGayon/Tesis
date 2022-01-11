@@ -72,6 +72,13 @@ View(bip1271)
 
 write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_01_data.xlsx")
 
+
+inter_crost_01 <- bip1271crost$components$c.in[,2]
+interdemand_1271 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_1271$inter_sba_01 <- bip1271SBA$components$c.in[,2]
+interdemand_1271$inter_sbj_01 <- bip1271SBJ$components$c.in[,2]
+
+
 #Croston method, SBA, SBJ with aplha = 0.15 for item BIP1271#
 bip1271 <- all_data[,1:2]
 bip1271crost <- crost(bip1271[2], h = 5, w = 0.15, init = "naive")
@@ -132,6 +139,12 @@ View(bip1271)
 
 write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_015_data.xlsx")
 
+inter_crost_015 <- bip1271crost$components$c.in[,2]
+interdemand_1271 <- data.frame(all_data[,1], inter_crost_015)
+interdemand_1271$inter_sba_015 <- bip1271SBA$components$c.in[,2]
+interdemand_1271$inter_sbj_015 <- bip1271SBJ$components$c.in[,2]
+
+
 #Croston method, SBA, SBJ with aplha = 0.2 for item BIP1271#
 bip1271 <- all_data[,1:2]
 bip1271crost <- crost(bip1271[2], h = 5, w = 0.2, init = "naive")
@@ -190,7 +203,10 @@ legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 
 
 View(bip1271)
 
-?crost
+inter_crost_015 <- bip1271crost$components$c.in[,2]
+interdemand_1271 <- data.frame(all_data[,1], inter_crost_015)
+interdemand_1271$inter_sba_015 <- bip1271SBA$components$c.in[,2]
+interdemand_1271$inter_sbj_015 <- bip1271SBJ$components$c.in[,2]
 
 
 write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_02_data.xlsx")
@@ -255,6 +271,10 @@ View(bip1271)
 
 write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_05_data.xlsx")
 
+inter_crost_05 <- bip1271crost$components$c.in[,2]
+interdemand_1271 <- data.frame(all_data[,1], inter_crost_05)
+interdemand_1271$inter_sba_05 <- bip1271SBA$components$c.in[,2]
+interdemand_1271$inter_sbj_05 <- bip1271SBJ$components$c.in[,2]
 
 #Croston method, SBA, SBJ with "optimal" alpha for item BIP1271#
 bip1271 <- all_data[,1:2]
@@ -317,7 +337,11 @@ View(bip1271)
 
 write_xlsx(bip1271, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip1271_opt_data.xlsx")
 
-
+inter_crost_opt <- bip1271crost$components$c.in[,2]
+interdemand_1271 <- data.frame(all_data[,1], inter_crost_opt)
+interdemand_1271$inter_sba_opt <- bip1271SBA$components$c.in[,2]
+interdemand_1271$inter_sbj_opt <- bip1271SBJ$components$c.in[,2]
+interdemand_1271
 
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
