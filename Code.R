@@ -221,7 +221,7 @@ bip1271SBA <- crost(bip1271[2], h = 5, w= 0.5, type = 'sba', init = 'naive')
 bip1271SBA
 SBA_1271 <- bip1271SBA$frc.in
 bip1271$SBA_smoothed <- SBA_1271
-bip1271SBJ <- crost(bip1271[2], h = 5, w = 0.5, type = 'sbj', init = "naive")
+bip1271SBJ <- crost(bip1271[2], h = 5, w = 0.5, type = 'sbj', init = c(60,2))
 bip1271SBJ
 SBJ_1271 <- bip1271SBJ$frc.in
 bip1271$SBJ_smoothed <- SBJ_1271
@@ -230,6 +230,9 @@ SES_bip1271 <- bip1271_ses$fitted
 SESpred_bip1271 <- bip1271_ses$mean
 bip1271 <- add_column(bip1271, SES_bip1271, .after = "BIP001271")
 SESpred_bip1271
+
+crost.decomp(bip1271[,2])
+
 
 type_error_1271 <- cbind(croston_1271, SBA_1271, SBJ_1271, SES_bip1271)
 dimensions_1271 <- dim(type_error_1271)[2]
