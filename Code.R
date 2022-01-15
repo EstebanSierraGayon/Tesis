@@ -62,7 +62,7 @@ lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
 lines(ts(SBJ_1271, frequency = 52), col='purple', lwd = 1)
 lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
 
-lines(ts(SES, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SES_bip1271, frequency = 52), col='cyan3', lwd = 1)
 lines(ts(SESpred_bip1271, start = c(1,1.69)), col='cyan3', lwd = 1)
 legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
        col = c("red","blue","purple","cyan3"), xpd = TRUE)
@@ -129,7 +129,7 @@ lines(ts(bip1271SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
 lines(ts(SBJ_1271, frequency = 52), col='purple', lwd = 1)
 lines(ts(bip1271SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
 
-lines(ts(SES, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SES_bip1271, frequency = 52), col='cyan3', lwd = 1)
 lines(ts(SESpred_bip1271, start = c(1,1.69)), col='cyan3', lwd = 1)
 legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
        col = c("red","blue","purple","cyan3"), xpd = TRUE)
@@ -345,6 +345,272 @@ interdemand_1271 <- data.frame(all_data[,1], inter_crost_opt)
 interdemand_1271$inter_sba_opt <- bip1271SBA$components$c.in[,2]
 interdemand_1271$inter_sbj_opt <- bip1271SBJ$components$c.in[,2]
 interdemand_1271
+
+#Croston model for item BIP8013 alpha = 0.1#
+bip8013 <- select(all_data, X, BIP008013)
+bip8013crost <- crost(bip8013[2], h = 5, w = 0.1, init = "naive")
+bip8013crost
+croston_8013 <- bip8013crost$frc.in
+bip8013$cros_smoothed <- croston_8013
+bip8013SBA <- crost(bip8013[2], h = 5, w= 0.1, type = 'sba', init = 'naive')
+bip8013SBA
+SBA_8013 <- bip8013SBA$frc.in
+bip8013$SBA_smoothed <- SBA_8013
+bip8013SBJ <- crost(bip8013[2], h = 5, w = 0.1, type = 'sbj', init = "naive")
+bip8013SBJ
+SBJ_8013 <- bip8013SBJ$frc.in
+bip8013$SBJ_smoothed <- SBJ_8013
+bip8013_ses <- ses(bip8013[,2], h = 5, alpha = 0.1, initial = "simple")
+SES_bip8013 <- bip8013_ses$fitted
+SESpred_bip8013 <- bip8013_ses$mean
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+SESpred_bip8013
+
+type_error_8013 <- cbind(croston_8013, SBA_8013, SBJ_8013, SES_bip8013)
+dimensions_8013 <- dim(type_error_8013)[2]
+smooth_data_8013 <- t(tcrossprod(rep(1,dimensions_8013),bip8013[,2]))
+errors_8013 <- smooth_data_8013 - type_error_8013
+errors_8013[is.na(errors_8013)] <- 0
+ME_8013 <- apply(errors_8013, 2, mean)
+MAE_8013 <- apply(abs(errors_8013), 2, mean)
+RMSE_8013 <- sqrt(apply(errors_8013^2, 2, mean))
+tot_err_8013 <- rbind(ME_8013, MAE_8013, RMSE_8013)
+print(tot_err_8013)
+
+bip8013$err_croston <- errors_8013[,1]
+bip8013$err_SBA <- errors_8013[,2]
+bip8013$err_SBJ <- errors_8013[,3]
+bip8013$err_SES <- errors_8013[,4]
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip8013$BIP008013, frequency = 52), main = "Forecast of item BIP008013", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_8013, frequency = 52), col='red', lwd = 1)
+lines(ts(bip8013crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_8013, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip8013SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_8013, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip8013SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip8013, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip8013, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip8013)
+
+write_xlsx(bip8013, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip8013_01_data.xlsx")
+
+
+inter_crost_01 <- bip8013crost$components$c.in[,2]
+interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
+interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
+
+#Croston model for item BIP8013 alpha = 0.15#
+bip8013 <- select(all_data, X, BIP008013)
+bip8013crost <- crost(bip8013[2], h = 5, w = 0.15, init = "naive")
+bip8013crost
+croston_8013 <- bip8013crost$frc.in
+bip8013$cros_smoothed <- croston_8013
+bip8013SBA <- crost(bip8013[2], h = 5, w= 0.15, type = 'sba', init = 'naive')
+bip8013SBA
+SBA_8013 <- bip8013SBA$frc.in
+bip8013$SBA_smoothed <- SBA_8013
+bip8013SBJ <- crost(bip8013[2], h = 5, w = 0.15, type = 'sbj', init = "naive")
+bip8013SBJ
+SBJ_8013 <- bip8013SBJ$frc.in
+bip8013$SBJ_smoothed <- SBJ_8013
+bip8013_ses <- ses(bip8013[,2], h = 5, alpha = 0.15, initial = "simple")
+SES_bip8013 <- bip8013_ses$fitted
+SESpred_bip8013 <- bip8013_ses$mean
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+SESpred_bip8013
+
+type_error_8013 <- cbind(croston_8013, SBA_8013, SBJ_8013, SES_bip8013)
+dimensions_8013 <- dim(type_error_8013)[2]
+smooth_data_8013 <- t(tcrossprod(rep(1,dimensions_8013),bip8013[,2]))
+errors_8013 <- smooth_data_8013 - type_error_8013
+errors_8013[is.na(errors_8013)] <- 0
+ME_8013 <- apply(errors_8013, 2, mean)
+MAE_8013 <- apply(abs(errors_8013), 2, mean)
+RMSE_8013 <- sqrt(apply(errors_8013^2, 2, mean))
+tot_err_8013 <- rbind(ME_8013, MAE_8013, RMSE_8013)
+print(tot_err_8013)
+
+bip8013$err_croston <- errors_8013[,1]
+bip8013$err_SBA <- errors_8013[,2]
+bip8013$err_SBJ <- errors_8013[,3]
+bip8013$err_SES <- errors_8013[,4]
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip8013$BIP008013, frequency = 52), main = "Forecast of item BIP008013", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_8013, frequency = 52), col='red', lwd = 1)
+lines(ts(bip8013crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_8013, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip8013SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_8013, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip8013SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip8013, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip8013, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip8013)
+
+write_xlsx(bip8013, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip8013_015_data.xlsx")
+
+
+inter_crost_01 <- bip8013crost$components$c.in[,2]
+interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
+interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
+
+#Croston model for item BIP8013 alpha = 0.5#
+bip8013 <- select(all_data, X, BIP008013)
+bip8013crost <- crost(bip8013[2], h = 5, w = 0.5, init = "naive")
+bip8013crost
+croston_8013 <- bip8013crost$frc.in
+bip8013$cros_smoothed <- croston_8013
+bip8013SBA <- crost(bip8013[2], h = 5, w= 0.5, type = 'sba', init = 'naive')
+bip8013SBA
+SBA_8013 <- bip8013SBA$frc.in
+bip8013$SBA_smoothed <- SBA_8013
+bip8013SBJ <- crost(bip8013[2], h = 5, w = 0.5, type = 'sbj', init = "naive")
+bip8013SBJ
+SBJ_8013 <- bip8013SBJ$frc.in
+bip8013$SBJ_smoothed <- SBJ_8013
+bip8013_ses <- ses(bip8013[,2], h = 5, alpha = 0.5, initial = "simple")
+SES_bip8013 <- bip8013_ses$fitted
+SESpred_bip8013 <- bip8013_ses$mean
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+SESpred_bip8013
+
+type_error_8013 <- cbind(croston_8013, SBA_8013, SBJ_8013, SES_bip8013)
+dimensions_8013 <- dim(type_error_8013)[2]
+smooth_data_8013 <- t(tcrossprod(rep(1,dimensions_8013),bip8013[,2]))
+errors_8013 <- smooth_data_8013 - type_error_8013
+errors_8013[is.na(errors_8013)] <- 0
+ME_8013 <- apply(errors_8013, 2, mean)
+MAE_8013 <- apply(abs(errors_8013), 2, mean)
+RMSE_8013 <- sqrt(apply(errors_8013^2, 2, mean))
+tot_err_8013 <- rbind(ME_8013, MAE_8013, RMSE_8013)
+print(tot_err_8013)
+
+bip8013$err_croston <- errors_8013[,1]
+bip8013$err_SBA <- errors_8013[,2]
+bip8013$err_SBJ <- errors_8013[,3]
+bip8013$err_SES <- errors_8013[,4]
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip8013$BIP008013, frequency = 52), main = "Forecast of item BIP008013", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_8013, frequency = 52), col='red', lwd = 1)
+lines(ts(bip8013crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_8013, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip8013SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_8013, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip8013SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip8013, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip8013, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip8013)
+
+write_xlsx(bip8013, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip8013_05_data.xlsx")
+
+
+inter_crost_01 <- bip8013crost$components$c.in[,2]
+interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
+interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
+
+#Croston model for item BIP8013 alpha = opt.#
+bip8013 <- select(all_data, X, BIP008013)
+bip8013crost <- crost(bip8013[2], h = 5, init = "naive")
+bip8013crost
+croston_8013 <- bip8013crost$frc.in
+bip8013$cros_smoothed <- croston_8013
+bip8013SBA <- crost(bip8013[2], h = 5, type = 'sba', init = 'naive')
+bip8013SBA
+SBA_8013 <- bip8013SBA$frc.in
+bip8013$SBA_smoothed <- SBA_8013
+bip8013SBJ <- crost(bip8013[2], h = 5, type = 'sbj', init = "naive")
+bip8013SBJ
+SBJ_8013 <- bip8013SBJ$frc.in
+bip8013$SBJ_smoothed <- SBJ_8013
+bip8013_ses <- ses(bip8013[,2], h = 5, initial = "simple")
+SES_bip8013 <- bip8013_ses$fitted
+SESpred_bip8013 <- bip8013_ses$mean
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+SESpred_bip8013
+bip8013_ses$model
+
+type_error_8013 <- cbind(croston_8013, SBA_8013, SBJ_8013, SES_bip8013)
+dimensions_8013 <- dim(type_error_8013)[2]
+smooth_data_8013 <- t(tcrossprod(rep(1,dimensions_8013),bip8013[,2]))
+errors_8013 <- smooth_data_8013 - type_error_8013
+errors_8013[is.na(errors_8013)] <- 0
+ME_8013 <- apply(errors_8013, 2, mean)
+MAE_8013 <- apply(abs(errors_8013), 2, mean)
+RMSE_8013 <- sqrt(apply(errors_8013^2, 2, mean))
+tot_err_8013 <- rbind(ME_8013, MAE_8013, RMSE_8013)
+print(tot_err_8013)
+
+bip8013$err_croston <- errors_8013[,1]
+bip8013$err_SBA <- errors_8013[,2]
+bip8013$err_SBJ <- errors_8013[,3]
+bip8013$err_SES <- errors_8013[,4]
+bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip8013$BIP008013, frequency = 52), main = "Forecast of item BIP008013", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_8013, frequency = 52), col='red', lwd = 1)
+lines(ts(bip8013crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_8013, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip8013SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_8013, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip8013SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip8013, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip8013, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip8013)
+
+write_xlsx(bip8013, "C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/bip8013_opt_data.xlsx")
+
+
+inter_crost_01 <- bip8013crost$components$c.in[,2]
+interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
+interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
+
 
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
@@ -850,41 +1116,7 @@ lines(ts(bip5887SBA$frc.out, start = c(1,1.69)), col='yellow')
 lines(ts(SBJ_5887, frequency = 52), col='orange')
 lines(ts(bip5887SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
-#Croston model for item BIP8013#
-bip8013 <- select(all_data, X, BIP008013)
-bip8013crost <- crost(bip8013[2], h = 5, w = 0.15, init = "naive")
-bip8013crost
-croston_8013 <- bip8013crost$frc.in
-bip8013$cros_smoothed <- croston_8013
-bip8013SBA <- crost(bip8013[2], h = 5, type = 'sba', init = 'naive')
-bip8013SBA
-SBA_8013 <- bip8013SBA$frc.in
-bip8013$SBA_smoothed <- SBA_8013
-bip8013SBJ <- crost(bip8013[2], h = 5, type = 'sbj', init = 'naive')
-bip8013SBJ
-SBJ_8013 <- bip8013SBJ$frc.in
-bip8013$SBJ_smoothed <- SBJ_8013
 
-type_error_8013 <- cbind(croston_8013, SBA_8013, SBJ_8013)
-dimensions_8013 <- dim(type_error_8013)[2]
-smooth_data_8013 <- t(tcrossprod(rep(1,dimensions_8013),bip8013[,2]))
-errors_8013 <- smooth_data_8013 - type_error_8013
-errors_8013[is.na(errors_8013)] <- 0
-ME_8013 <- apply(errors_8013, 2, mean)
-MAE_8013 <- apply(abs(errors_8013), 2, mean)
-RMSE_8013 <- sqrt(apply(errors_8013^2, 2, mean))
-tot_err_8013 <- rbind(ME_8013, MAE_8013, RMSE_8013)
-print(tot_err_8013)
-
-plot(ts(bip8013$BIP008013, frequency = 52), type = 'b', xlim = c(1, 1.8))
-lines(ts(croston_8013, frequency = 52), col='red')
-lines(ts(bip8013crost$frc.out, start=c(1,1.69)), col='green')
-
-lines(ts(SBA_8013, frequency = 52), col='blue')
-lines(ts(bip8013SBA$frc.out, start = c(1,1.69)), col='yellow')
-
-lines(ts(SBJ_8013, frequency = 52), col='orange')
-lines(ts(bip8013SBJ$frc.out, start = c(1, 1.69)), col='purple')
 
 #Croston model for item BIP3816#
 bip3816 <- select(all_data, X, BIP003816)
