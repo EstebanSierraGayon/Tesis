@@ -411,6 +411,7 @@ inter_crost_01 <- bip8013crost$components$c.in[,2]
 interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
 interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
+interdemand_8013
 
 #Croston model for item BIP8013 alpha = 0.15#
 bip8013 <- select(all_data, X, BIP008013)
@@ -477,6 +478,7 @@ inter_crost_01 <- bip8013crost$components$c.in[,2]
 interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
 interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
+interdemand_8013
 
 #Croston model for item BIP8013 alpha = 0.5#
 bip8013 <- select(all_data, X, BIP008013)
@@ -543,6 +545,7 @@ inter_crost_01 <- bip8013crost$components$c.in[,2]
 interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
 interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
+interdemand_8013
 
 #Croston model for item BIP8013 alpha = opt.#
 bip8013 <- select(all_data, X, BIP008013)
@@ -564,6 +567,9 @@ SESpred_bip8013 <- bip8013_ses$mean
 bip8013 <- add_column(bip8013, SES_bip8013, .after = "BIP008013")
 SESpred_bip8013
 bip8013_ses$model
+
+crost.decomp(bip8013[,2])
+crost.decomp(bip1271[,2])
 
 type_error_8013 <- cbind(croston_8013, SBA_8013, SBJ_8013, SES_bip8013)
 dimensions_8013 <- dim(type_error_8013)[2]
@@ -610,7 +616,7 @@ inter_crost_01 <- bip8013crost$components$c.in[,2]
 interdemand_8013 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
 interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
-
+interdemand_8013
 
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
