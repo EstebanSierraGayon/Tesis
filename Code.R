@@ -9,7 +9,7 @@ library(writexl)
 
 ?crost
 
-all_data <- read.csv("C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/AllData.csv", header = TRUE)
+all_data <- read.csv("D:/Esteban/TESIS/Tesis/Tesis/AllData.csv", header = TRUE)
 
 
 #Croston method, SBA, SBJ with aplha = 0.1 for item BIP1271#
@@ -618,6 +618,274 @@ interdemand_8013$inter_sba_01 <- bip8013SBA$components$c.in[,2]
 interdemand_8013$inter_sbj_01 <- bip8013SBJ$components$c.in[,2]
 interdemand_8013
 
+
+#Croston model for item BIP5887 with apha = 0.1#
+bip5887 <- select(all_data, X, BIP005887)
+bip5887crost <- crost(bip5887[2], h = 5, w = 0.1, init = "naive")
+bip5887crost
+croston_5887 <- bip5887crost$frc.in
+bip5887$cros_smoothed <- croston_5887
+bip5887SBA <- crost(bip5887[2], h = 5, w= 0.1, type = 'sba', init = 'naive')
+bip5887SBA
+SBA_5887 <- bip5887SBA$frc.in
+bip5887$SBA_smoothed <- SBA_5887
+bip5887SBJ <- crost(bip5887[2], h = 5, w = 0.1, type = 'sbj', init = "naive")
+bip5887SBJ
+SBJ_5887 <- bip5887SBJ$frc.in
+bip5887$SBJ_smoothed <- SBJ_5887
+bip5887_ses <- ses(bip5887[,2], h = 5, alpha = 0.1, initial = "simple")
+SES_bip5887 <- bip5887_ses$fitted
+SESpred_bip5887 <- bip5887_ses$mean
+bip5887 <- add_column(bip5887, SES_bip5887, .after = "BIP005887")
+SESpred_bip5887
+
+type_error_5887 <- cbind(croston_5887, SBA_5887, SBJ_5887, SES_bip5887)
+dimensions_5887 <- dim(type_error_5887)[2]
+smooth_data_5887 <- t(tcrossprod(rep(1,dimensions_5887),bip5887[,2]))
+errors_5887 <- smooth_data_5887 - type_error_5887
+errors_5887[is.na(errors_5887)] <- 0
+ME_5887 <- apply(errors_5887, 2, mean)
+MAE_5887 <- apply(abs(errors_5887), 2, mean)
+RMSE_5887 <- sqrt(apply(errors_5887^2, 2, mean))
+tot_err_5887 <- rbind(ME_5887, MAE_5887, RMSE_5887)
+print(tot_err_5887)
+
+bip5887$err_croston <- errors_5887[,1]
+bip5887$err_SBA <- errors_5887[,2]
+bip5887$err_SBJ <- errors_5887[,3]
+bip5887$err_SES <- errors_5887[,4]
+
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip5887$BIP005887, frequency = 52), main = "Forecast of item BIP005887", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_5887, frequency = 52), col='red', lwd = 1)
+lines(ts(bip5887crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_5887, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip5887SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_5887, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip5887SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip5887, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip5887, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip5887)
+
+write_xlsx(bip5887, "D:/Esteban/TESIS/Tesis/Tesis/bip5887_01_data.xlsx")
+
+
+inter_crost_01 <- bip5887crost$components$c.in[,2]
+interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
+interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
+
+
+#Croston model for item BIP5887 with apha = 0.15#
+bip5887 <- select(all_data, X, BIP005887)
+bip5887crost <- crost(bip5887[2], h = 5, w = 0.15, init = "naive")
+bip5887crost
+croston_5887 <- bip5887crost$frc.in
+bip5887$cros_smoothed <- croston_5887
+bip5887SBA <- crost(bip5887[2], h = 5, w= 0.15, type = 'sba', init = 'naive')
+bip5887SBA
+SBA_5887 <- bip5887SBA$frc.in
+bip5887$SBA_smoothed <- SBA_5887
+bip5887SBJ <- crost(bip5887[2], h = 5, w = 0.15, type = 'sbj', init = "naive")
+bip5887SBJ
+SBJ_5887 <- bip5887SBJ$frc.in
+bip5887$SBJ_smoothed <- SBJ_5887
+bip5887_ses <- ses(bip5887[,2], h = 5, alpha = 0.15, initial = "simple")
+SES_bip5887 <- bip5887_ses$fitted
+SESpred_bip5887 <- bip5887_ses$mean
+bip5887 <- add_column(bip5887, SES_bip5887, .after = "BIP005887")
+SESpred_bip5887
+
+type_error_5887 <- cbind(croston_5887, SBA_5887, SBJ_5887, SES_bip5887)
+dimensions_5887 <- dim(type_error_5887)[2]
+smooth_data_5887 <- t(tcrossprod(rep(1,dimensions_5887),bip5887[,2]))
+errors_5887 <- smooth_data_5887 - type_error_5887
+errors_5887[is.na(errors_5887)] <- 0
+ME_5887 <- apply(errors_5887, 2, mean)
+MAE_5887 <- apply(abs(errors_5887), 2, mean)
+RMSE_5887 <- sqrt(apply(errors_5887^2, 2, mean))
+tot_err_5887 <- rbind(ME_5887, MAE_5887, RMSE_5887)
+print(tot_err_5887)
+
+bip5887$err_croston <- errors_5887[,1]
+bip5887$err_SBA <- errors_5887[,2]
+bip5887$err_SBJ <- errors_5887[,3]
+bip5887$err_SES <- errors_5887[,4]
+
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip5887$BIP005887, frequency = 52), main = "Forecast of item BIP005887", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_5887, frequency = 52), col='red', lwd = 1)
+lines(ts(bip5887crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_5887, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip5887SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_5887, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip5887SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip5887, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip5887, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip5887)
+
+write_xlsx(bip5887, "D:/Esteban/TESIS/Tesis/Tesis/bip5887_015_data.xlsx")
+
+
+inter_crost_01 <- bip5887crost$components$c.in[,2]
+interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
+interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
+
+#Croston model for item BIP5887 with apha = 0.5#
+bip5887 <- select(all_data, X, BIP005887)
+bip5887crost <- crost(bip5887[2], h = 5, w = 0.5, init = "naive")
+bip5887crost
+croston_5887 <- bip5887crost$frc.in
+bip5887$cros_smoothed <- croston_5887
+bip5887SBA <- crost(bip5887[2], h = 5, w= 0.5, type = 'sba', init = 'naive')
+bip5887SBA
+SBA_5887 <- bip5887SBA$frc.in
+bip5887$SBA_smoothed <- SBA_5887
+bip5887SBJ <- crost(bip5887[2], h = 5, w = 0.5, type = 'sbj', init = "naive")
+bip5887SBJ
+SBJ_5887 <- bip5887SBJ$frc.in
+bip5887$SBJ_smoothed <- SBJ_5887
+bip5887_ses <- ses(bip5887[,2], h = 5, alpha = 0.5, initial = "simple")
+SES_bip5887 <- bip5887_ses$fitted
+SESpred_bip5887 <- bip5887_ses$mean
+bip5887 <- add_column(bip5887, SES_bip5887, .after = "BIP005887")
+SESpred_bip5887
+
+type_error_5887 <- cbind(croston_5887, SBA_5887, SBJ_5887, SES_bip5887)
+dimensions_5887 <- dim(type_error_5887)[2]
+smooth_data_5887 <- t(tcrossprod(rep(1,dimensions_5887),bip5887[,2]))
+errors_5887 <- smooth_data_5887 - type_error_5887
+errors_5887[is.na(errors_5887)] <- 0
+ME_5887 <- apply(errors_5887, 2, mean)
+MAE_5887 <- apply(abs(errors_5887), 2, mean)
+RMSE_5887 <- sqrt(apply(errors_5887^2, 2, mean))
+tot_err_5887 <- rbind(ME_5887, MAE_5887, RMSE_5887)
+print(tot_err_5887)
+
+bip5887$err_croston <- errors_5887[,1]
+bip5887$err_SBA <- errors_5887[,2]
+bip5887$err_SBJ <- errors_5887[,3]
+bip5887$err_SES <- errors_5887[,4]
+
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip5887$BIP005887, frequency = 52), main = "Forecast of item BIP005887", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_5887, frequency = 52), col='red', lwd = 1)
+lines(ts(bip5887crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_5887, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip5887SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_5887, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip5887SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip5887, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip5887, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip5887)
+
+write_xlsx(bip5887, "D:/Esteban/TESIS/Tesis/Tesis/bip5887_05_data.xlsx")
+
+
+inter_crost_01 <- bip5887crost$components$c.in[,2]
+interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
+interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
+
+#Croston model for item BIP5887 with apha = optimum#
+bip5887 <- select(all_data, X, BIP005887)
+bip5887crost <- crost(bip5887[2], h = 5, init = "naive")
+bip5887crost
+croston_5887 <- bip5887crost$frc.in
+bip5887$cros_smoothed <- croston_5887
+bip5887SBA <- crost(bip5887[2], h = 5, type = 'sba', init = 'naive')
+bip5887SBA
+SBA_5887 <- bip5887SBA$frc.in
+bip5887$SBA_smoothed <- SBA_5887
+bip5887SBJ <- crost(bip5887[2], h = 5, type = 'sbj', init = "naive")
+bip5887SBJ
+SBJ_5887 <- bip5887SBJ$frc.in
+bip5887$SBJ_smoothed <- SBJ_5887
+bip5887_ses <- ses(bip5887[,2], h = 5, initial = "simple")
+SES_bip5887 <- bip5887_ses$fitted
+SESpred_bip5887 <- bip5887_ses$mean
+bip5887 <- add_column(bip5887, SES_bip5887, .after = "BIP005887")
+SESpred_bip5887
+bip5887_ses$model
+
+type_error_5887 <- cbind(croston_5887, SBA_5887, SBJ_5887, SES_bip5887)
+dimensions_5887 <- dim(type_error_5887)[2]
+smooth_data_5887 <- t(tcrossprod(rep(1,dimensions_5887),bip5887[,2]))
+errors_5887 <- smooth_data_5887 - type_error_5887
+errors_5887[is.na(errors_5887)] <- 0
+ME_5887 <- apply(errors_5887, 2, mean)
+MAE_5887 <- apply(abs(errors_5887), 2, mean)
+RMSE_5887 <- sqrt(apply(errors_5887^2, 2, mean))
+tot_err_5887 <- rbind(ME_5887, MAE_5887, RMSE_5887)
+print(tot_err_5887)
+
+bip5887$err_croston <- errors_5887[,1]
+bip5887$err_SBA <- errors_5887[,2]
+bip5887$err_SBJ <- errors_5887[,3]
+bip5887$err_SES <- errors_5887[,4]
+
+
+opar <- par(no.readonly = TRUE)
+par(mar=c(5.1, 4.1, 4.1, 6))
+plot(ts(bip5887$BIP005887, frequency = 52), main = "Forecast of item BIP005887", type = 'b', xlim = c(1, 1.8),
+     ylab = "Demand", lwd = 2)
+lines(ts(croston_5887, frequency = 52), col='red', lwd = 1)
+lines(ts(bip5887crost$frc.out, start=c(1,1.69)), col='red', lwd = 1)
+
+lines(ts(SBA_5887, frequency = 52), col='blue', lwd = 1)
+lines(ts(bip5887SBA$frc.out, start = c(1,1.69)), col='blue', lwd = 1)
+
+lines(ts(SBJ_5887, frequency = 52), col='purple', lwd = 1)
+lines(ts(bip5887SBJ$frc.out, start = c(1, 1.69)), col='purple', lwd = 1)
+
+lines(ts(SES_bip5887, frequency = 52), col='cyan3', lwd = 1)
+lines(ts(SESpred_bip5887, start = c(1,1.69)), col='cyan3', lwd = 1)
+legend("bottomright", legend = c("Croston", "SBA", "SBJ", "Exp. smooth"), lwd = 1,
+       col = c("red","blue","purple","cyan3"), xpd = TRUE)
+
+
+View(bip5887)
+
+write_xlsx(bip5887, "D:/Esteban/TESIS/Tesis/Tesis/bip5887_opt_data.xlsx")
+
+
+inter_crost_01 <- bip5887crost$components$c.in[,2]
+interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
+interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
+interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
+
+
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
 bip3819crost <- crost(bip3819[2], h = 5, w = 0.15, init = "naive")
@@ -1085,44 +1353,6 @@ lines(ts(bip6806SBA$frc.out, start = c(1,1.69)), col='yellow')
 
 lines(ts(SBJ_6806, frequency = 52), col='orange')
 lines(ts(bip6806SBJ$frc.out, start = c(1, 1.69)), col='purple')
-
-#Croston model for item BIP5887#
-bip5887 <- select(all_data, X, BIP005887)
-bip5887crost <- crost(bip5887[2], h = 5, w = 0.15, init = "naive")
-bip5887crost
-croston_5887 <- bip5887crost$frc.in
-bip5887$cros_smoothed <- croston_5887
-bip5887SBA <- crost(bip5887[2], h = 5, type = 'sba', init = 'naive')
-bip5887SBA
-SBA_5887 <- bip5887SBA$frc.in
-bip5887$SBA_smoothed <- SBA_5887
-bip5887SBJ <- crost(bip5887[2], h = 5, type = 'sbj', init = 'naive')
-bip5887SBJ
-SBJ_5887 <- bip5887SBJ$frc.in
-bip5887$SBJ_smoothed <- SBJ_5887
-
-type_error_5887 <- cbind(croston_5887, SBA_5887, SBJ_5887)
-dimensions_5887 <- dim(type_error_5887)[2]
-smooth_data_5887 <- t(tcrossprod(rep(1,dimensions_5887),bip5887[,2]))
-errors_5887 <- smooth_data_5887 - type_error_5887
-errors_5887[is.na(errors_5887)] <- 0
-ME_5887 <- apply(errors_5887, 2, mean)
-MAE_5887 <- apply(abs(errors_5887), 2, mean)
-RMSE_5887 <- sqrt(apply(errors_5887^2, 2, mean))
-tot_err_5887 <- rbind(ME_5887, MAE_5887, RMSE_5887)
-print(tot_err_5887)
-
-plot(ts(bip5887$BIP005887, frequency = 52), type = 'b', xlim = c(1, 1.8))
-lines(ts(croston_5887, frequency = 52), col='red')
-lines(ts(bip5887crost$frc.out, start=c(1,1.69)), col='green')
-
-lines(ts(SBA_5887, frequency = 52), col='blue')
-lines(ts(bip5887SBA$frc.out, start = c(1,1.69)), col='yellow')
-
-lines(ts(SBJ_5887, frequency = 52), col='orange')
-lines(ts(bip5887SBJ$frc.out, start = c(1, 1.69)), col='purple')
-
-
 
 #Croston model for item BIP3816#
 bip3816 <- select(all_data, X, BIP003816)
