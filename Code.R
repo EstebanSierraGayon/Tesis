@@ -684,6 +684,7 @@ inter_crost_01 <- bip5887crost$components$c.in[,2]
 interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
 interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
+interdemand_5887
 
 
 #Croston model for item BIP5887 with apha = 0.15#
@@ -751,6 +752,8 @@ inter_crost_01 <- bip5887crost$components$c.in[,2]
 interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
 interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
+interdemand_5887
+
 
 #Croston model for item BIP5887 with apha = 0.5#
 bip5887 <- select(all_data, X, BIP005887)
@@ -817,6 +820,8 @@ inter_crost_01 <- bip5887crost$components$c.in[,2]
 interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
 interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
+interdemand_5887
+
 
 #Croston model for item BIP5887 with apha = optimum#
 bip5887 <- select(all_data, X, BIP005887)
@@ -884,7 +889,7 @@ inter_crost_01 <- bip5887crost$components$c.in[,2]
 interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
 interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
-
+interdemand_5887
 
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
