@@ -1,15 +1,17 @@
 install.packages("dplyr")
 install.packages("writexl")
+install.packages("MAPA")
 
 library(forecast)
 library(tsintermittent)
 library(dplyr)
 library(tibble)
 library(writexl)
+library(MAPA)
 
 ?crost
 
-all_data <- read.csv("D:/Esteban/TESIS/Tesis/Tesis/AllData.csv", header = TRUE)
+all_data <- read.csv("C:/Users/2506/Desktop/TESIS/DOCUMENTOS TESIS/Capitulos/R/Tesis/AllData.csv", header = TRUE)
 
 
 #Croston method, SBA, SBJ with aplha = 0.1 for item BIP1271#
@@ -78,6 +80,21 @@ interdemand_1271 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_1271$inter_sba_01 <- bip1271SBA$components$c.in[,2]
 interdemand_1271$inter_sbj_01 <- bip1271SBJ$components$c.in[,2]
 
+
+?tsaggr
+?imapa
+prueba1 <- imapa(bip1271[,2], h = 5, outplot = 2)
+prueba1$frc.in
+prueba1$summary
+
+prueba2 <- as.vector(imapa(bip1271[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
+prueba2
+
+
+
+
+
+?mapa
 
 #Croston method, SBA, SBJ with aplha = 0.15 for item BIP1271#
 bip1271 <- all_data[,1:2]
