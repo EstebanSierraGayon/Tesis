@@ -83,14 +83,27 @@ interdemand_1271$inter_sbj_01 <- bip1271SBJ$components$c.in[,2]
 
 ?tsaggr
 ?imapa
-prueba1 <- imapa(bip1271[,2], h = 5, outplot = 2)
-prueba1$frc.in
-prueba1$summary
+.ad1271 <- all_data[,1:2]
+bip1271_agr <- tsaggr(ad1271[,2], fout = 2, outplot = 1)
+bip1271_agr$out
+bip1271_adida <- as.vector(imapa(bip1271[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
+bip1271_adida
+bip1271_ad_smoot <- bip1271_adida$frc.in
+bip1271_ad_smoot[is.na(bip1271_ad_smoot)] <- 0
+ad1271$adida <- bip1271_ad_smoot[1,]
 
-prueba2 <- as.vector(imapa(bip1271[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
+
+
+bip1271_agr <- tsaggr(ad1271[,2], fout = c(1,2,3,4,5,6,7,8,9), outplot = 1)
+bip1271_agr
+bip1271_mapa <- imapa(bip1271[,2], h = 5, outplot = 2)
+bip1271_mapa$frc.in
+bip1271_mapa$summary
+bip1271_mapa$frc.out
+View(bip1271_mapa)
 prueba2
 
-
+?imapa
 
 
 
