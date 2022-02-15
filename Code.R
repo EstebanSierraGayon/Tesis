@@ -83,31 +83,6 @@ interdemand_1271$inter_sbj_01 <- bip1271SBJ$components$c.in[,2]
 
 ?tsaggr
 ?imapa
-.ad1271 <- all_data[,1:2]
-bip1271_agr <- tsaggr(ad1271[,2], fout = 2, outplot = 1)
-bip1271_agr$out
-bip1271_adida <- as.vector(imapa(bip1271[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
-bip1271_adida
-bip1271_ad_smoot <- bip1271_adida$frc.in
-bip1271_ad_smoot[is.na(bip1271_ad_smoot)] <- 0
-ad1271$adida <- bip1271_ad_smoot[1,]
-
-
-
-bip1271_agr <- tsaggr(ad1271[,2], fout = c(1,2,3,4,5,6,7,8,9), outplot = 1)
-bip1271_agr
-bip1271_mapa <- imapa(bip1271[,2], h = 5, outplot = 2)
-bip1271_mapa$frc.in
-bip1271_mapa$summary
-bip1271_mapa$frc.out
-View(bip1271_mapa)
-prueba2
-
-?imapa
-
-
-
-?mapa
 
 #Croston method, SBA, SBJ with aplha = 0.15 for item BIP1271#
 bip1271 <- all_data[,1:2]
@@ -920,6 +895,106 @@ interdemand_5887 <- data.frame(all_data[,1], inter_crost_01)
 interdemand_5887$inter_sba_01 <- bip5887SBA$components$c.in[,2]
 interdemand_5887$inter_sbj_01 <- bip5887SBJ$components$c.in[,2]
 interdemand_5887
+
+
+#ADIDA and MAPA for item BIP1271#
+ad1271 <- all_data[,1:2]
+bip1271_agr <- tsaggr(ad1271[,2], fout = 2, outplot = 1)
+bip1271_agr$out
+bip1271_adida <- as.vector(imapa(ad1271[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
+bip1271_adida
+bip1271_ad_smoot <- bip1271_adida$frc.in
+bip1271_ad_smoot[is.na(bip1271_ad_smoot)] <- 0
+ad1271$adida <- bip1271_ad_smoot[1,]
+
+bip1271_agr <- tsaggr(ad1271[,2], fout = c(1,2,3,4,5,6,7,8,9), outplot = 1)
+bip1271_agr
+bip1271_mapa <- imapa(ad1271[,2], h = 5, outplot = 2)
+bip1271mapa_smooth <- bip1271_mapa$frc.in
+bip1271mapa_smooth[is.na(bip1271mapa_smooth)] <- 0
+ad1271$mapa <- bip1271mapa_smooth
+bip1271_mapa$summary
+bip1271_mapa$frc.out
+View(bip1271_mapa$frc.in)
+ad1271
+
+aggr_1271_err <- cbind(select(ad1271, adida), bip1271mapa_smooth)
+dimensions_aggr1271 <- dim(aggr_1271_err)[2]
+smooth_aggr_1271 <- t(tcrossprod(rep(1,dimensions_aggr1271),ad1271[,2]))
+agg_errors_1271 <- smooth_aggr_1271 - aggr_1271_err
+agg_errors_1271[is.na(agg_errors_1271)] <- 0
+ME_aggr_1271 <- apply(agg_errors_1271, 2, mean)
+MAE_aggr_1271 <- apply(abs(agg_errors_1271), 2, mean)
+RMSE_aggr_1271 <- sqrt(apply(agg_errors_1271^2, 2, mean))
+tot_aggrerr_1271 <- rbind(ME_aggr_1271, MAE_aggr_1271, RMSE_aggr_1271)
+print(tot_aggrerr_1271)
+
+#ADIDA and MAPA for item BIP8013#
+ad8013 <- select(all_data, X, BIP008013)
+bip8013_agr <- tsaggr(ad8013[,2], fout = 2, outplot = 1)
+bip8013_agr$out
+bip8013_adida <- as.vector(imapa(ad8013[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
+bip8013_adida
+bip8013_ad_smoot <- bip8013_adida$frc.in
+bip8013_ad_smoot[is.na(bip8013_ad_smoot)] <- 0
+ad8013$adida <- bip8013_ad_smoot[1,]
+View(ad)
+
+bip8013_agr <- tsaggr(ad8013[,2], fout = c(1,2,3,4,5,6,7,8,9), outplot = 1)
+bip8013_agr
+bip8013_mapa <- imapa(ad8013[,2], h = 5, outplot = 2)
+bip8013mapa_smooth <- bip8013_mapa$frc.in
+bip8013mapa_smooth[is.na(bip8013mapa_smooth)] <- 0
+ad8013$mapa <- bip8013mapa_smooth
+bip8013_mapa$summary
+bip8013_mapa$frc.out
+View(bip8013_mapa$frc.in)
+ad8013
+
+aggr_8013_err <- cbind(select(ad8013, adida), bip8013mapa_smooth)
+dimensions_aggr8013 <- dim(aggr_8013_err)[2]
+smooth_aggr_8013 <- t(tcrossprod(rep(1,dimensions_aggr8013),ad8013[,2]))
+agg_errors_8013 <- smooth_aggr_8013 - aggr_8013_err
+agg_errors_8013[is.na(agg_errors_8013)] <- 0
+ME_aggr_8013 <- apply(agg_errors_8013, 2, mean)
+MAE_aggr_8013 <- apply(abs(agg_errors_8013), 2, mean)
+RMSE_aggr_8013 <- sqrt(apply(agg_errors_8013^2, 2, mean))
+tot_aggrerr_8013 <- rbind(ME_aggr_8013, MAE_aggr_8013, RMSE_aggr_8013)
+print(tot_aggrerr_8013)
+
+#ADIDA and MAPA for item BIP5887#
+ad5887 <- select(all_data, X, BIP005887)
+bip5887_agr <- tsaggr(ad5887[,2], fout = 2, outplot = 1)
+bip5887_agr$out
+bip5887_adida <- as.vector(imapa(ad5887[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
+bip5887_adida
+bip5887_ad_smoot <- bip5887_adida$frc.in
+bip5887_ad_smoot[is.na(bip5887_ad_smoot)] <- 0
+ad5887$adida <- bip5887_ad_smoot[1,]
+View(ad)
+
+bip5887_agr <- tsaggr(ad5887[,2], fout = c(1,2,3,4,5,6,7,8,9), outplot = 1)
+bip5887_agr
+bip5887_mapa <- imapa(ad5887[,2], h = 5, outplot = 2)
+bip5887mapa_smooth <- bip5887_mapa$frc.in
+bip5887mapa_smooth[is.na(bip5887mapa_smooth)] <- 0
+ad5887$mapa <- bip5887mapa_smooth
+bip5887_mapa$summary
+bip5887_mapa$frc.out
+View(bip5887_mapa$frc.in)
+ad5887
+
+aggr_5887_err <- cbind(select(ad5887, adida), bip5887mapa_smooth)
+dimensions_aggr5887 <- dim(aggr_5887_err)[2]
+smooth_aggr_5887 <- t(tcrossprod(rep(1,dimensions_aggr5887),ad5887[,2]))
+agg_errors_5887 <- smooth_aggr_5887 - aggr_5887_err
+agg_errors_5887[is.na(agg_errors_5887)] <- 0
+ME_aggr_5887 <- apply(agg_errors_5887, 2, mean)
+MAE_aggr_5887 <- apply(abs(agg_errors_5887), 2, mean)
+RMSE_aggr_5887 <- sqrt(apply(agg_errors_5887^2, 2, mean))
+tot_aggrerr_5887 <- rbind(ME_aggr_5887, MAE_aggr_5887, RMSE_aggr_5887)
+print(tot_aggrerr_5887)
+
 
 #Croston method for item BIP3819#
 bip3819 <- select(all_data, X, BIP003819)
