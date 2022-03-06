@@ -917,6 +917,7 @@ bip1271_mapa$summary
 bip1271_mapa$frc.out
 View(bip1271_mapa$frc.in)
 ad1271
+bip1271_mapa$model.fit
 
 aggr_1271_err <- cbind(select(ad1271, adida), bip1271mapa_smooth)
 dimensions_aggr1271 <- dim(aggr_1271_err)[2]
@@ -1391,6 +1392,39 @@ lines(ts(bip8920SBA$frc.out, start = c(1,1.69)), col='yellow')
 
 lines(ts(SBJ_8920, frequency = 52), col='orange')
 lines(ts(bip8920SBJ$frc.out, start = c(1, 1.69)), col='purple')
+
+
+ad8920 <- select(all_data, X, BIP008920)
+bip8920_agr <- tsaggr(ad8920[,2], fout = 2, outplot = 1)
+bip8920_agr$out
+bip8920_adida <- as.vector(imapa(ad8920[,2], h=5, minimumAL = 2, maximumAL = 2, outplot = 1))
+bip8920_adida
+bip8920_ad_smoot <- bip8920_adida$frc.in
+bip8920_ad_smoot[is.na(bip8920_ad_smoot)] <- 0
+ad8920$adida <- bip8920_ad_smoot[1,]
+View(ad)
+
+bip8920_agr <- tsaggr(ad8920[,2], fout = c(1,2,3,4,5,6,7,8,9), outplot = 1)
+bip8920_agr
+bip8920_mapa <- imapa(ad8920[,2], h = 5, outplot = 2)
+bip8920mapa_smooth <- bip8920_mapa$frc.in
+bip8920mapa_smooth[is.na(bip8920mapa_smooth)] <- 0
+ad8920$mapa <- bip8920mapa_smooth
+bip8920_mapa$summary
+bip8920_mapa$frc.out
+View(bip8920_mapa$frc.in)
+ad8920
+
+aggr_8920_err <- cbind(select(ad8920, adida), bip8920mapa_smooth)
+dimensions_aggr8920 <- dim(aggr_8920_err)[2]
+smooth_aggr_8920 <- t(tcrossprod(rep(1,dimensions_aggr8920),ad8920[,2]))
+agg_errors_8920 <- smooth_aggr_8920 - aggr_8920_err
+agg_errors_8920[is.na(agg_errors_8920)] <- 0
+ME_aggr_8920 <- apply(agg_errors_8920, 2, mean)
+MAE_aggr_8920 <- apply(abs(agg_errors_8920), 2, mean)
+RMSE_aggr_8920 <- sqrt(apply(agg_errors_8920^2, 2, mean))
+tot_aggrerr_8920 <- rbind(ME_aggr_8920, MAE_aggr_8920, RMSE_aggr_8920)
+print(tot_aggrerr_8920)
 
 #Croston model for item BIP9107#
 bip9107 <- select(all_data, X, BIP009107)
